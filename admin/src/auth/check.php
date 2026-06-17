@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $response->fetch_assoc();
         
         // Save authorization identity properties to active session arrays
-        $_SESSION["userInfo"] = $user['id'];
+        $_SESSION["userId"] = $user['id'];
         $_SESSION["userRole"] = $user['role_id']; 
         
         // Traffic Control Routing Layer
