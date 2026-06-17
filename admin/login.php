@@ -1,10 +1,17 @@
 <?php
+require_once '../config/database.php';
 session_start(); // Make sure session_start() is called before checking $_SESSION
-if (isset($_SESSION["userId"])){
-    header("location:index.html");
-    exit(); // Always use exit() after a header redirect
-}
-?>
+if (isset($_SESSION["userId"]) && isset($_SESSION["userId"])){
+    
+    // 3. Traffic control check: Where should an already logged-in user go?
+    if ($_SESSION["userRole"] == 1 || $_SESSION["userRole"] == 2) {
+        // They are an admin/vendor, kick them straight into the admin dashboard
+        redirect("index.php"); 
+    } else {
+        // They are a customer, bounce them back out to the public storefront
+        // redirect("../index.php");
+    }
+}?>
 
 <!DOCTYPE html>
 <html lang="en">
