@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION["userRole"] = $user['role_id']; 
         
         // Traffic Control Routing Layer
-        if ($user['role_id'] == 1 || $user['role_id'] == 2) {
+        if ($user['role_id'] == 3 || $user['role_id'] == 2) {
             // Authorized Dashboard operators (Admin / Vendor)
             redirect("../../index.php"); 
         } else {
