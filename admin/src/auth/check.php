@@ -2,20 +2,17 @@
 // admin/src/auth/check.php
 
 // 1. Always ensure sessions are started at the absolute top of an auth file
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
 // Step up three directories to reach your new global classes folder
 require_once '../../../classes/Database.php';
 require_once '../../../classes/Utils.php';
+Utils::startSecureSession();
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Grab the inputs (PDO handles SQL security, but trimming whitespace is still good practice)
-    $email = Utils::sanitize(trim($_POST['email']));
-    $password = Utils::sanitize(trim($_POST['password'])); 
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']); 
 
     try {
         // Get your PDO instance (adjust this to match how your new Database.php exposes PDO)
@@ -44,14 +41,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Traffic Control Routing Layer
             if ($user['role_id'] == 3 || $user['role_id'] == 2) {
                 // Authorized Dashboard operators (Admin / Vendor)
-                Utils::redirect("../../index.php"); 
+                Utils::redirect(ADMIN_URL . "index.php"); 
             } else {
                 // Normal consumer client identity -> route to general public catalog
-                Utils::redirect("../../../index.php"); 
+                Utils::redirect(BASE_URL . "index.php"); 
             }
         } else {
             // Credential matching failure (bad email or bad password)
-            Utils::redirect("../../login.php?error=failed_login");
+            Utils::redirect(ADMIN_URL . "login.php?error=failed_login");
         }
 
     } catch (PDOException $e) {
@@ -60,5 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
 } else {
-    redirect("../../login.php");
+    // Direct URL access protection: Safely bounce back to the login page using the class wrapper
+    redirect(ADMIN_URL . "login.php");
 }
