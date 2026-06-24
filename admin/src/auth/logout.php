@@ -1,6 +1,10 @@
 <?php
 // 1. Load the database/config bootstrap which starts the session globally
-require_once '../../../config/database.php';
+require_once '../../../classes/Database.php';
+require_once '../../../classes/Utils.php';
+if(session_status() == PHP_SESSION_NONE ){
+    session_start();
+}
 
 // 2. Unset all session superglobal variables in-memory
 $_SESSION = array();
@@ -24,5 +28,5 @@ session_destroy();
 
 // 5. Use your global APP_URL base path to safely route them back to the login gateway
 // This passes the 'logged_out' flag to trigger your beautiful green success alert banner!
-redirect("../../../admin/login.php?error=logged_out");
+Utils::redirect("../../../admin/login.php?error=logged_out");
 exit;

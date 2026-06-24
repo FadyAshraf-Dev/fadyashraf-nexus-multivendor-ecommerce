@@ -1,15 +1,19 @@
 <?php
-require_once '../config/database.php';
-
-if (isset($_SESSION["userId"])) {
+require_once '../classes/Database.php';
+require_once '../classes/Utils.php';
+if(session_status() == PHP_SESSION_NONE ){
+    session_start();
+}
+if (isset($_SESSION["user"])) {
     // Traffic control check: Where should an already logged-in user go?
-
-    if ($_SESSION["userRole"] == 3 || $_SESSION["userRole"] == 2) {
+    
+    $userRole = $_SESSION["user"]["role_id"];
+    if ($userRole == 3 || $userRole == 2) {
         // They are an admin/vendor, kick them straight into the admin dashboard
-        redirect("index.php"); 
+        Utils::redirect("index.php"); 
     } else {
         // They are a customer, bounce them back out to the public storefront
-        redirect("../index.php");
+        Utils::redirect("../index.php");
     }
 }
 
