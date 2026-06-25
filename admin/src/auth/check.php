@@ -31,10 +31,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // 5. Check if a user was found and verify their credentials
         // (If you are using plain text passwords for now, keep this. If using password_hash, use password_verify)
         if ($user && $password === $user['password']) {
-            
+            // 🛡️ Erases the old session ID file on the server and issues a brand new random ID token to the browser
+            session_regenerate_id(true);
             // Save authorization identity properties to active session arrays (exclude the password!)
             $_SESSION["user"] = [
                 'id' => $user['id'],
+                'email' => $user['email'],
+                // 'first_name' => $user['first_name'],
+                // 'last_name' => $user['last_name'],
                 'role_id' => $user['role_id']
             ];
             
