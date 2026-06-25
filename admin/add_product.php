@@ -17,7 +17,7 @@ $userRole = $_SESSION["user"]["role_id"];
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>Wizard - SB Admin Pro</title>
-        <link href="css/styles.css" rel="stylesheet" />
+        <link href="<?= Utils::asset('css/styles.css') ?>" rel="stylesheet" />
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.png" />
         <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js" crossorigin="anonymous"></script>
@@ -324,7 +324,7 @@ $userRole = $_SESSION["user"]["role_id"];
                                     </div>
                                     <div class="card-body">
                                         <!-- Single form wraps the whole wizard so one submit posts every step's fields together-->
-                                        <form id="addProductForm" action="add-product-handler.php" method="POST" enctype="multipart/form-data" novalidate>
+                                        <form id="addProductForm" action="src/action/products/insert.php" method="POST" enctype="multipart/form-data" novalidate>
                                             <input type="hidden" name="csrf_token" value="<?= Utils::getCSRFToken(); ?>">
                                             <div class="tab-content" id="productWizardTabContent">
                                                 <!-- ============================================= -->
@@ -420,9 +420,9 @@ $userRole = $_SESSION["user"]["role_id"];
                                                                 <div class="mb-3 col-md-6">
                                                                     <label class="small mb-1" for="selectDiscountType">Discount Type</label>
                                                                     <select class="form-select" id="selectDiscountType" name="discount_type">
-                                                                        <option value="" selected>No discount</option>
-                                                                        <option value="percentage">Percentage</option>
-                                                                        <option value="fixed">Fixed Amount</option>
+                   
+                                                                   <option value="" selected>No discount</option>
+                                                                        <option value="relative">Percentage (%)</option>                                                          <option value="fixed">Fixed Amount</option>
                                                                     </select>
                                                                 </div>
                                                                 <div class="mb-3 col-md-6">
@@ -480,12 +480,6 @@ $userRole = $_SESSION["user"]["role_id"];
                                                             <h5 class="card-title mb-4">Upload product images</h5>
 
                                                             <div class="mb-3">
-                                                                <label class="small mb-1" for="inputMainImage">Main Image</label>
-                                                                <input class="form-control" id="inputMainImage" name="main_image" type="file" accept="image/*" />
-                                                                <div class="form-text">This is the primary image shown in listings and search results.</div>
-                                                            </div>
-
-                                                            <div class="mb-3">
                                                                 <label class="small mb-1" for="inputImageGallery">Image Gallery</label>
                                                                 <input class="form-control" id="inputImageGallery" name="gallery_images[]" type="file" accept="image/*" multiple />
                                                                 <div class="form-text">You can select multiple additional images to showcase the product.</div>
@@ -522,8 +516,8 @@ $userRole = $_SESSION["user"]["role_id"];
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="js/scripts.js"></script>
-        <script src="js/wizard.js"></script>
+                <script src="<?= Utils::asset('js/scripts.js') ?>"></script>
+                <script src="<?= Utils::asset('js/wizard.js') ?>"></script>
                 <script>
                 // Enable/disable the Discount Value field based on Discount Type.
                 var discountType = document.getElementById('selectDiscountType');
