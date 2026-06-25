@@ -324,7 +324,7 @@ $userRole = $_SESSION["user"]["role_id"];
                                     </div>
                                     <div class="card-body">
                                         <!-- Single form wraps the whole wizard so one submit posts every step's fields together-->
-                                        <form id="addProductForm" action="src/action/products/insert.php" method="POST" enctype="multipart/form-data" novalidate>
+                                        <form id="addProductForm" action="src/actions/products/insert.php" method="POST" enctype="multipart/form-data" novalidate>
                                             <input type="hidden" name="csrf_token" value="<?= Utils::getCSRFToken(); ?>">
                                             <div class="tab-content" id="productWizardTabContent">
                                                 <!-- ============================================= -->
