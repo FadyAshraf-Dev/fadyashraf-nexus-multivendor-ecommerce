@@ -1,42 +1,43 @@
 <?php
-// classes/Database.php
 
-class Database {
-    private static $instance = null;
-    private $pdo;
+declare(strict_types=1);
 
-    // The constructor is private so no one can instantiate it multiple times with 'new Database()'
-    private function __construct() {
-        $host    = 'localhost';
-        $db      = 'nexus';
-        $user    = 'root';
-        $pass    = '';
-        $charset = 'utf8mb4';
+final class Database
+{
+    private static ?PDO $connection = null;
 
-        $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-        
-        $options = [
-            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, // Throw exceptions on SQL syntax errors
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,       // Fetch records as clean associative arrays
-            PDO::ATTR_EMULATE_PREPARES   => false,                  // Use real prepared statements for security
-        ];
+    public static function connection(): PDO
+    {
+        if (self::$connection === null) {
 
-        try {
-            $this->pdo = new PDO($dsn, $user, $pass, $options);
-        } catch (PDOException $e) {
-            // In production, log this error securely instead of echoing it
-            die("Database connection failed: " . $e->getMessage());
+            $dsn = sprintf(
+                '%s:host=%s;dbname=%s;charset=%s',
+                Config::database('driver'),
+                Config::database('host'),
+                Config::database('dbname'),
+                Config::database('charset')
+            );
+
+            self::$connection = new PDO(
+                $dsn,
+                Config::database('username'),
+                Config::database('password'),
+                [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                ]
+            );
         }
+
+        return self::$connection;
     }
 
-    /**
-     * Public static method to get the single PDO connection instance.
-     * Use throughout the app as: Database::connect()
-     */
-    public static function connect() {
-        if (self::$instance === null) {
-            self::$instance = new self();
-        }
-        return self::$instance->pdo;
+    private function __construct() {}
+    private function __clone() {}
+
+    public function __wakeup(): void
+    {
+        throw new LogicException('Cannot unserialize Database.');
     }
 }
