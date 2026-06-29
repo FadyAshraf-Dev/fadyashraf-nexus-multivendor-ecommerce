@@ -16,28 +16,28 @@ function validateContainer(container) {
 
     if (field.type === "file") {
       if (field.required && field.files.length === 0) {
-        showValidation(field, field.validationMessage);
+        showFeedback(field, field.validationMessage);
         valid = false;
 
         if (!firstInvalid) {
           firstInvalid = field;
         }
       } else {
-        clearValidation(field);
+        clearFeedback(field);
       }
 
       return;
     }
 
     if (!field.checkValidity()) {
-      showValidation(field, field.validationMessage);
+      showFeedback(field, field.validationMessage);
       valid = false;
 
       if (!firstInvalid) {
         firstInvalid = field;
       }
     } else {
-      clearValidation(field);
+      clearFeedback(field);
     }
   });
 
@@ -60,9 +60,9 @@ function initializeFormValidation(form) {
       }
 
       if (field.checkValidity()) {
-        clearValidation(field);
+        clearFeedback(field);
       } else {
-        showValidation(field, field.validationMessage);
+        showFeedback(field, field.validationMessage);
       }
     });
     field.addEventListener("change", function () {
@@ -72,17 +72,17 @@ function initializeFormValidation(form) {
 
       if (field.type === "file") {
         if (field.checkValidity()) {
-          clearValidation(field);
+          clearFeedback(field);
         } else {
-          showValidation(field, field.validationMessage);
+          showFeedback(field, field.validationMessage);
         }
         return;
       }
 
       if (field.checkValidity()) {
-        clearValidation(field);
+        clearFeedback(field);
       } else  {
-        showValidation(field, field.validationMessage);
+        showFeedback(field, field.validationMessage);
       }
     });
   });
@@ -96,26 +96,4 @@ function startValidation() {
 
 function isValidationStarted() {
   return validationStarted;
-}
-function showValidation(field, message="") {
-  field.classList.add("is-invalid");
-
-  const feedback = field.parentElement.querySelector(".invalid-feedback");
-
-  if (!feedback) {
-    return;
-  }
-
-  feedback.textContent = message;
-}
-function clearValidation(field) {
-  field.classList.remove("is-invalid");
-
-  const feedback = field.parentElement.querySelector(".invalid-feedback");
-
-  if (!feedback) {
-    return;
-  }
-
-  feedback.textContent = "";
 }

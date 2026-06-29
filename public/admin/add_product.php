@@ -404,10 +404,12 @@ $categories = $categoryRepository->findAll();
 
    <script src="<?= Asset::admin('js/shared/validation.js') ?>"></script>
    <script src="<?= Asset::admin('js/shared/wizard.js') ?>"></script>
+   <script src="<?= Asset::admin('js/shared/wizardValidation.js') ?>"></script>
    <script src="<?= Asset::admin('js/shared/discount.js') ?>"></script>
    <script src="<?= Asset::admin('js/shared/constraints.js') ?>"></script>
    <script src="<?= Asset::admin('js/shared/scroll.js') ?>"></script>
    <script src="<?= Asset::admin('js/shared/dom.js') ?>"></script>
+   <script src="<?= Asset::admin('js/shared/feedback.js') ?>"></script>
 
    <script src="<?= Asset::admin('js/pages/add-product.js') ?>"></script>
    <script>
