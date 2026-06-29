@@ -16,30 +16,28 @@ function validateContainer(container) {
 
     if (field.type === "file") {
       if (field.required && field.files.length === 0) {
-        field.classList.add("is-invalid");
-
+        showValidation(field, field.validationMessage);
         valid = false;
 
         if (!firstInvalid) {
           firstInvalid = field;
         }
       } else {
-        field.classList.remove("is-invalid");
+        clearValidation(field);
       }
 
       return;
     }
 
     if (!field.checkValidity()) {
-      field.classList.add("is-invalid");
-
+      showValidation(field, field.validationMessage);
       valid = false;
 
       if (!firstInvalid) {
         firstInvalid = field;
       }
     } else {
-      field.classList.remove("is-invalid");
+      clearValidation(field);
     }
   });
 
@@ -61,7 +59,11 @@ function initializeFormValidation(form) {
         return;
       }
 
-      field.classList.toggle("is-invalid", !field.checkValidity());
+      if (field.checkValidity()) {
+        clearValidation(field);
+      } else {
+        showValidation(field, field.validationMessage);
+      }
     });
     field.addEventListener("change", function () {
       if (!isValidationStarted()) {
@@ -69,15 +71,19 @@ function initializeFormValidation(form) {
       }
 
       if (field.type === "file") {
-        field.classList.toggle(
-          "is-invalid",
-          field.required && field.files.length === 0,
-        );
-
+        if (field.checkValidity()) {
+          clearValidation(field);
+        } else {
+          showValidation(field, field.validationMessage);
+        }
         return;
       }
 
-      field.classList.toggle("is-invalid", !field.checkValidity());
+      if (field.checkValidity()) {
+        clearValidation(field);
+      } else  {
+        showValidation(field, field.validationMessage);
+      }
     });
   });
 }
@@ -90,4 +96,26 @@ function startValidation() {
 
 function isValidationStarted() {
   return validationStarted;
+}
+function showValidation(field, message="") {
+  field.classList.add("is-invalid");
+
+  const feedback = field.parentElement.querySelector(".invalid-feedback");
+
+  if (!feedback) {
+    return;
+  }
+
+  feedback.textContent = message;
+}
+function clearValidation(field) {
+  field.classList.remove("is-invalid");
+
+  const feedback = field.parentElement.querySelector(".invalid-feedback");
+
+  if (!feedback) {
+    return;
+  }
+
+  feedback.textContent = "";
 }
