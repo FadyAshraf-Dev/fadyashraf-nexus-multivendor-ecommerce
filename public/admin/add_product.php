@@ -14,11 +14,11 @@ function old(string $key, mixed $default = ''): mixed
 
 function error(string $key): string
 {
-    $message = $GLOBALS['errors'][$key] ?? '';
+   $message = $GLOBALS['errors'][$key] ?? '';
 
-    return '<div class="invalid-feedback">'
-        . Html::escape($message)
-        . '</div>';
+   return '<div class="invalid-feedback">'
+      . Html::escape($message)
+      . '</div>';
 }
 $userId = Gatekeeper::id();
 $userRole = Gatekeeper::roleId();
@@ -182,7 +182,8 @@ $categories = $categoryRepository->findAll();
                                                 <input
                                                    class="form-control <?= isset($errors['brand']) ? ' is-invalid' : '' ?>"
                                                    id="inputBrand" name="brand" type="text"
-                                                   placeholder="Enter the brand name" maxlength="100" value="<?= old('brand') ?>" />
+                                                   placeholder="Enter the brand name" maxlength="100"
+                                                   value="<?= old('brand') ?>" />
                                                 <?= error('brand') ?>
                                              </div>
                                           </div>
@@ -190,7 +191,7 @@ $categories = $categoryRepository->findAll();
                                              class="<?= Errors::has('status') ? 'border border-danger rounded p-2' : '' ?>">
 
                                              <div class="mb-3">
-                                                <label class="small mb-1 d-block">Status</label>
+                                                <label class="small mb-1 d-block required" >Status</label>
                                                 <?php
                                                 $status = $old['status'] ?? 'active';
                                                 ?>
@@ -246,8 +247,8 @@ $categories = $categoryRepository->findAll();
                                                       id="inputCostPrice" name="cost_price" type="number" min="0"
                                                       step="0.01" placeholder="0.00" required
                                                       value="<?= old('cost_price') ?>" />
-                                                   </div>
                                                    <?= error('cost_price') ?>
+                                                </div>
                                              </div>
                                              <div class="mb-3 col-md-6">
                                                 <label class="small mb-1" for="inputSellingPrice">Selling Price</label>
@@ -258,8 +259,8 @@ $categories = $categoryRepository->findAll();
                                                       id="inputSellingPrice" name="selling_price" type="number" min="0"
                                                       step="0.01" placeholder="0.00" required
                                                       value="<?= old('selling_price') ?>" />
-                                                   </div>
                                                    <?= error('selling_price') ?>
+                                                </div>
                                              </div>
                                           </div>
 
@@ -366,19 +367,29 @@ $categories = $categoryRepository->findAll();
                                        <div class="col-xxl-9 col-xl-10">
                                           <h3 class="text-primary">Step 4</h3>
                                           <h5 class="card-title mb-4">Upload product images</h5>
-
                                           <div class="mb-3">
-                                             <label class="small mb-1" for="inputImageGallery">Image
-                                                Gallery</label>
+
+                                             <label class="small mb-1" for="inputImageGallery">
+                                                Image Gallery
+                                             </label>
+
                                              <input
-                                                class="form-control <?= isset($errors['full_description']) ? ' is-invalid' : '' ?>"
+                                                class="form-control <?= isset($errors['images']) ? 'is-invalid' : '' ?>"
                                                 id="inputImageGallery" name="images[]" type="file" accept="image/*"
                                                 multiple required />
-                                             <div class="form-text">You can select multiple additional
-                                                images to showcase the product.</div>
-                                          </div>
-                                          <?= error('images') ?>
 
+                                             <div class="form-text">
+                                                You can upload up to 5 images.
+                                                Drag them below to change their order.
+                                                The first image becomes the product thumbnail.
+                                             </div>
+
+                                             <?= error('images') ?>
+
+                                             <div id="imagePreviewContainer" class="row g-3 mt-3">
+                                             </div>
+
+                                          </div>
                                           <hr class="my-4" />
                                           <div class="d-flex justify-content-between">
                                              <button class="btn btn-light btn-wizard-prev" type="button"
@@ -407,9 +418,9 @@ $categories = $categoryRepository->findAll();
    <script src="<?= Asset::admin('js/shared/wizardValidation.js') ?>"></script>
    <script src="<?= Asset::admin('js/shared/discount.js') ?>"></script>
    <script src="<?= Asset::admin('js/shared/constraints.js') ?>"></script>
-   <script src="<?= Asset::admin('js/shared/scroll.js') ?>"></script>
    <script src="<?= Asset::admin('js/shared/dom.js') ?>"></script>
    <script src="<?= Asset::admin('js/shared/feedback.js') ?>"></script>
+   <script src="<?= Asset::admin('js/shared/imageGallery.js') ?>"></script>
 
    <script src="<?= Asset::admin('js/pages/add-product.js') ?>"></script>
    <script>

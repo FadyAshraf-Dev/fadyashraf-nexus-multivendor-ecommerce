@@ -2,7 +2,9 @@
    Dynamic Constraints
 ===================================================== */
 
-function initializeDynamicConstraints(dom) {
+function initializeDynamicConstraints(app) {
+
+    const { dom } = app;
 
     const costPrice = dom.costPrice;
     const sellingPrice = dom.sellingPrice;
@@ -15,14 +17,7 @@ function initializeDynamicConstraints(dom) {
         function updateSellingPrice() {
 
             sellingPrice.min = costPrice.value || 0;
-
-            if (
-                costPrice.value &&
-                sellingPrice.value &&
-                Number(sellingPrice.value) < Number(costPrice.value)
-            ) {
-                sellingPrice.value = costPrice.value;
-            }
+            
 
         }
 
@@ -37,14 +32,7 @@ function initializeDynamicConstraints(dom) {
         function updateLowStock() {
 
             lowStock.max = stockQuantity.value || "";
-
-            if (
-                stockQuantity.value &&
-                lowStock.value &&
-                Number(lowStock.value) > Number(stockQuantity.value)
-            ) {
-                lowStock.value = stockQuantity.value;
-            }
+            
 
         }
 

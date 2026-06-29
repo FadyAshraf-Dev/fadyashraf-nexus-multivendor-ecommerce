@@ -9,8 +9,9 @@ CSRF::verify();
 $_POST['vendor_id'] = Gatekeeper::id();
 
 $validator = ProductValidator::validate($_POST);
-
-if ($validator->fails()) {
+if ($message = ProductValidator::validateImageCount($_FILES['images'])) {
+    $errors['images'] = $message;
+}if ($validator->fails()) {
 
     Errors::set($validator->errors());
     Old::set($_POST);

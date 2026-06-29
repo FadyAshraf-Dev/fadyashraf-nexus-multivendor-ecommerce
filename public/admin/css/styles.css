@@ -21044,3 +21044,18 @@ pre[class*=language-] {
 .token.variable {
   color: #ff6666;
 }
+.sortable-ghost {
+    opacity: .4;
+}
+
+.image-preview-card {
+    cursor: grab;
+}
+
+.image-preview-card.sortable-chosen {
+    cursor: grabbing;
+}
+.required::after {
+    content: " *";
+    color: var(--bs-danger);
+}

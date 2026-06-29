@@ -1,10 +1,12 @@
-function initializeWizardValidation() {
+function initializeWizardValidation(app) {
+      const { dom, state } = app;
+
   const steps = Array.from(document.querySelectorAll(".tab-pane"));
   document.querySelectorAll(".btn-wizard-next").forEach(function (button) {
     button.addEventListener(
       "click",
       function (event) {
-        startValidation();
+        state.validationStarted = true;
 
         const currentStep = button.closest(".tab-pane");
 
@@ -19,7 +21,7 @@ function initializeWizardValidation() {
   const form = document.getElementById("addProductForm");
 
   form.addEventListener("submit", function (event) {
-    startValidation();
+    state.validationStarted = true;
     const lastStep = document.getElementById("step4");
 
     if (!validateContainer(lastStep)) {
@@ -30,7 +32,7 @@ function initializeWizardValidation() {
     .querySelectorAll("#productWizardTab .nav-link")
     .forEach(function (tab) {
       tab.addEventListener("show.bs.tab", function (event) {
-        startValidation();
+        state.validationStarted = true;
 
         const currentStep = document.querySelector(".tab-pane.active");
 

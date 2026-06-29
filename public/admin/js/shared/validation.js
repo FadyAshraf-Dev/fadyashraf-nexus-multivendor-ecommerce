@@ -1,4 +1,5 @@
-let validationStarted = false;
+const MAX_IMAGES = 5;
+let validationState = null;
 /* =====================================================
    Container Validation
 ===================================================== */
@@ -14,23 +15,33 @@ function validateContainer(container) {
       return;
     }
 
+    /* ---------- File Inputs ---------- */
+
     if (field.type === "file") {
-      if (field.required && field.files.length === 0) {
+      if (!field.checkValidity()) {
         showFeedback(field, field.validationMessage);
+
         valid = false;
 
         if (!firstInvalid) {
           firstInvalid = field;
         }
-      } else {
-        clearFeedback(field);
+      } else if (!validateFileCount(field)) {
+        valid = false;
+
+        if (!firstInvalid) {
+          firstInvalid = field;
+        }
       }
 
       return;
     }
 
+    /* ---------- Everything Else ---------- */
+
     if (!field.checkValidity()) {
       showFeedback(field, field.validationMessage);
+
       valid = false;
 
       if (!firstInvalid) {
@@ -52,10 +63,14 @@ function validateContainer(container) {
    Live Validation
 ===================================================== */
 
-function initializeFormValidation(form) {
+function initializeFormValidation(app) {
+  const { dom, state } = app;
+    validationState = app.state;
+
+  const form = dom.form;
   form.querySelectorAll("input, select, textarea").forEach(function (field) {
     field.addEventListener("input", function () {
-      if (field.type === "file" || !isValidationStarted()) {
+      if (field.type === "file" || !state.validationStarted) {
         return;
       }
 
@@ -65,35 +80,48 @@ function initializeFormValidation(form) {
         showFeedback(field, field.validationMessage);
       }
     });
+
     field.addEventListener("change", function () {
-      if (!isValidationStarted()) {
+      if (!state.validationStarted) {
         return;
       }
 
+      /* ---------- File Inputs ---------- */
+
       if (field.type === "file") {
-        if (field.checkValidity()) {
-          clearFeedback(field);
-        } else {
+        if (!field.checkValidity()) {
           showFeedback(field, field.validationMessage);
+        } else {
+          validateFileCount(field);
         }
+
         return;
       }
+
+      /* ---------- Everything Else ---------- */
 
       if (field.checkValidity()) {
         clearFeedback(field);
-      } else  {
+      } else {
         showFeedback(field, field.validationMessage);
       }
     });
   });
 }
+
 /* =====================================================
    Helpers
 ===================================================== */
-function startValidation() {
-  validationStarted = true;
+
+function validateFileCount(field) {
+  if (field.files.length > MAX_IMAGES) {
+    showFeedback(field, `You may upload a maximum of ${MAX_IMAGES} images.`);
+
+    return false;
+  }
+
+  clearFeedback(field);
+
+  return true;
 }
 
-function isValidationStarted() {
-  return validationStarted;
-}

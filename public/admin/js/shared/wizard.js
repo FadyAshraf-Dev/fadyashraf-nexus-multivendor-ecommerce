@@ -3,7 +3,6 @@
 ===================================================== */
 
 function initializeWizardNavigation() {
-
     document.querySelectorAll(".btn-wizard-next")
         .forEach(function (button) {
 
@@ -39,6 +38,30 @@ function initializeWizardNavigation() {
                 bootstrap.Tab
                     .getOrCreateInstance(targetTab)
                     .show();
+
+            });
+
+        });
+
+}
+/* =====================================================
+   Scroll Behavior
+===================================================== */
+
+function initializeScrollBehavior(app) {
+
+    document
+        .querySelectorAll('#productWizardTab [data-bs-toggle="tab"]')
+        .forEach(function (tab) {
+
+            tab.addEventListener("shown.bs.tab", function () {
+
+                tab.closest(".card").scrollIntoView({
+
+                    behavior: "smooth",
+                    block: "start"
+
+                });
 
             });
 

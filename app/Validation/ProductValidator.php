@@ -9,40 +9,40 @@ final class ProductValidator
         $validator = (new Validator($data))->validate([
 
             'product_name'
-                => 'required|min_len:3|max_len:150',
+            => 'required|min_len:3|max_len:150',
 
             'short_description'
-                => 'required|min_len:10|max_len:170',
+            => 'required|min_len:10|max_len:170',
 
             'full_description'
-                => 'required|min_len:20',
+            => 'required|min_len:20',
 
             'category_id'
-                => 'required|integer|exists:categories,id',
+            => 'required|integer|exists:categories,id',
 
             'status'
-                => 'required|in:active,inactive',
+            => 'required|in:active,inactive',
 
             'brand'
-                => 'nullable|max_len:100',
+            => 'nullable|max_len:100',
 
             'cost_price'
-                => 'required|numeric|min:0',
+            => 'required|numeric|min:0',
 
             'selling_price'
-                => 'required|numeric|min:cost_price',
+            => 'required|numeric|min:cost_price',
 
             'discount_type'
-                => 'nullable|in:relative,fixed',
+            => 'nullable|in:relative,fixed',
 
             'discount_value'
-                => 'required_if:discount_type|numeric|min:0',
+            => 'required_if:discount_type|numeric|min:0',
 
             'stock_quantity'
-                => 'required|integer|min:0',
+            => 'required|integer|min:0',
 
             'low_stock_threshold'
-                => 'nullable|integer|min:0',
+            => 'nullable|integer|min:0',
 
         ]);
 
@@ -69,7 +69,7 @@ final class ProductValidator
 
         if (
             $type === 'relative'
-            && (float)$value > 100
+            && (float) $value > 100
         ) {
             $validator->addError(
                 'discount_value',
@@ -79,7 +79,7 @@ final class ProductValidator
 
         if (
             $type === 'fixed'
-            && (float)$value > (float)$data['selling_price']
+            && (float) $value > (float) $data['selling_price']
         ) {
             $validator->addError(
                 'discount_value',
@@ -87,5 +87,22 @@ final class ProductValidator
             );
         }
     }
-    
+    public static function validateImageCount(array $files): ?string
+    {
+        $count = count(array_filter(
+            $files['name'],
+            fn($name) => $name !== ''
+        ));
+
+        if ($count < 1) {
+            return 'Please upload at least one image.';
+        }
+
+        if ($count > 5) {
+            return 'You may upload a maximum of 5 images.';
+        }
+
+        return null;
+    }
+
 }

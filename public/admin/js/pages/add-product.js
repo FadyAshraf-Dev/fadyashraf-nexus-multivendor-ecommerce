@@ -9,27 +9,46 @@ const ELEMENTS = {
 
   discountType: "selectDiscountType",
   discountValue: "inputDiscountValue",
+  imageGallery: "inputImageGallery",
+imagePreviewContainer: "imagePreviewContainer",
 };
 
 document.addEventListener("DOMContentLoaded", initializePage);
 
 function initializePage() {
-  const dom = createDom(ELEMENTS);
+  const app = {
+    dom: createDom(ELEMENTS),
 
-  initializeFormValidation(dom.form);
+    state: {
+      validationStarted: false,
+    },
+  };
 
-  initializeWizardNavigation();
+  initializeFormValidation(app);
 
-  initializeScrollBehavior();
+  initializeWizardNavigation(app);
 
-  initializeDiscountToggle(dom);
+  initializeScrollBehavior(app);
 
-  initializeDynamicConstraints(dom);
+  initializeDiscountToggle(app);
 
-  initializeWizardValidation();
+  initializeDynamicConstraints(app);
+
+  initializeWizardValidation(app);
+  initializeImageGallery(app);
+  document.querySelectorAll("[required]").forEach(function(field) {
+
+    const label = document.querySelector(
+        `label[for="${field.id}"]`
+    );
+
+    if (label) {
+        label.classList.add("required");
+    }
+
+});
 }
 
 /* =====================================================
    Wizard Validation
 ===================================================== */
-
