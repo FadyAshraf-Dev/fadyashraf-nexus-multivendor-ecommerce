@@ -14,13 +14,11 @@ function old(string $key, mixed $default = ''): mixed
 
 function error(string $key): string
 {
-   if (!isset($GLOBALS['errors'][$key])) {
-      return '';
-   }
+    $message = $GLOBALS['errors'][$key] ?? '';
 
-   return '<div class="text-danger small mt-1">'
-      . Html::escape($GLOBALS['errors'][$key])
-      . '</div>';
+    return '<div class="invalid-feedback">'
+        . Html::escape($message)
+        . '</div>';
 }
 $userId = Gatekeeper::id();
 $userRole = Gatekeeper::roleId();
